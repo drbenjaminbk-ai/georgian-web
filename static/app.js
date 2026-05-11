@@ -91,10 +91,15 @@ function resetLanguageState() {
   els.study.classList.remove("active");
 }
 
+function setActiveMode(mode) {
+  els.exam.classList.toggle("active", mode === "exam");
+  els.study.classList.toggle("active", mode === "study");
+}
+
 async function startExam() {
   resetLanguageState();
   state.mode = "exam";
-  els.exam.classList.add("active");
+  setActiveMode("exam");
 
   if (staticSite) {
     const questions = staticSite.sections
@@ -115,7 +120,7 @@ function showStudyMode() {
   resetLanguageState();
   state.mode = "study-select";
   state.title = "Режим обучения";
-  els.study.classList.add("active");
+  setActiveMode("study");
   els.sections.classList.add("visible");
   render();
 }
@@ -133,7 +138,7 @@ async function startSection(section, name, button) {
     item.classList.remove("active");
   });
   button.classList.add("active");
-  els.study.classList.add("active");
+  setActiveMode("study");
   startSession("study", name, questions || []);
 }
 
