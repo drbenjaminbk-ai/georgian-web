@@ -22,6 +22,7 @@ def main() -> None:
 
     shutil.copytree(STATIC_DIR, DOCS_DIR)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    (DOCS_DIR / ".nojekyll").write_text("", encoding="utf-8")
 
     payload = app.bootstrap()
     for section in payload["sections"]:

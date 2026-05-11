@@ -1,6 +1,7 @@
 const state = {
+  view: "home",
   mode: null,
-  title: "Выберите экзамен или раздел",
+  title: "Выберите режим",
   questions: [],
   current: 0,
   score: 0,
@@ -11,10 +12,15 @@ const state = {
 let staticSite = null;
 
 const els = {
+  home: document.querySelector("#home-screen"),
+  languageApp: document.querySelector("#language-app"),
+  languageCard: document.querySelector("#language-card"),
+  languageCount: document.querySelector("#language-count"),
   count: document.querySelector("#question-count"),
   sections: document.querySelector("#sections"),
   exam: document.querySelector("#exam-button"),
-  reset: document.querySelector("#reset-button"),
+  study: document.querySelector("#study-button"),
+  homeButton: document.querySelector("#home-button"),
   title: document.querySelector("#screen-title"),
   mode: document.querySelector("#mode-label"),
   score: document.querySelector("#score"),
@@ -55,9 +61,23 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function resetSession() {
+function showHome() {
+  resetLanguageState();
+  state.view = "home";
+  els.home.classList.remove("is-hidden");
+  els.languageApp.classList.add("is-hidden");
+}
+
+function showLanguage() {
+  state.view = "language";
+  els.home.classList.add("is-hidden");
+  els.languageApp.classList.remove("is-hidden");
+  render();
+}
+
+function resetLanguageState() {
   state.mode = null;
-  state.title = "Выберите экзамен или раздел";
+  state.title = "Выберите режим";
   state.questions = [];
   state.current = 0;
   state.score = 0;
@@ -66,10 +86,16 @@ function resetSession() {
   document.querySelectorAll(".section-button").forEach((button) => {
     button.classList.remove("active");
   });
-  render();
+  els.sections.classList.remove("visible");
+  els.exam.classList.remove("active");
+  els.study.classList.remove("active");
 }
 
 async function startExam() {
+  resetLanguageState();
+  state.mode = "exam";
+  els.exam.classList.add("active");
+
   if (staticSite) {
     const questions = staticSite.sections
       .filter((section) => section.questions.length)
@@ -85,6 +111,15 @@ async function startExam() {
   startSession("exam", "Экзамен", data.questions);
 }
 
+function showStudyMode() {
+  resetLanguageState();
+  state.mode = "study-select";
+  state.title = "Режим обучения";
+  els.study.classList.add("active");
+  els.sections.classList.add("visible");
+  render();
+}
+
 async function startSection(section, name, button) {
   let questions = null;
   if (staticSite) {
@@ -98,6 +133,7 @@ async function startSection(section, name, button) {
     item.classList.remove("active");
   });
   button.classList.add("active");
+  els.study.classList.add("active");
   startSession("study", name, questions || []);
 }
 
@@ -148,10 +184,14 @@ function next() {
 }
 
 function render() {
+  if (state.view === "home") {
+    return;
+  }
+
   const total = state.questions.length;
   const answeredCount = state.answered.size;
   els.title.textContent = state.title;
-  els.mode.textContent = state.mode === "exam" ? "Экзаменационный режим" : "Учебный режим";
+  els.mode.textContent = modeLabel();
   els.score.textContent = `${state.score} / ${total}`;
   els.progress.style.width = total ? `${(answeredCount / total) * 100}%` : "0%";
   els.prev.disabled = state.current === 0 || total === 0;
@@ -159,18 +199,31 @@ function render() {
   els.next.textContent = total && state.current === total - 1 ? "Итог" : "Дальше";
 
   if (!total) {
+    const emptyText = state.mode === "study-select"
+      ? "Выберите тему в левом меню, чтобы пройти все вопросы этого раздела."
+      : "Выберите экзамен или режим обучения. В экзамене будет 10 случайных заданий, в обучении можно пройти вопросы по отдельным темам.";
     els.panel.innerHTML = `
       <div class="empty-state">
         <div class="georgian-strip" aria-hidden="true">
           <span>ა</span><span>ბ</span><span>გ</span><span>დ</span>
         </div>
-        <p>Здесь появится вопрос. В экзамене будет 10 случайных заданий, в учебе - все вопросы выбранного раздела.</p>
+        <p>${emptyText}</p>
       </div>
     `;
     return;
   }
 
   renderQuestion();
+}
+
+function modeLabel() {
+  if (state.mode === "exam") {
+    return "Экзамен";
+  }
+  if (state.mode === "study" || state.mode === "study-select") {
+    return "Режим обучения";
+  }
+  return "Грузинский язык";
 }
 
 function renderQuestion() {
@@ -256,6 +309,7 @@ async function init() {
   const data = await getFirstJson(["api/bootstrap", "data/site.json"]);
   staticSite = data.sections.some((section) => Array.isArray(section.questions)) ? data : null;
   els.count.textContent = `${data.total} вопросов`;
+  els.languageCount.textContent = `${data.total} вопросов`;
   els.sections.innerHTML = data.sections.map((section, index) => `
     <button class="section-button" type="button" data-section="${section.id}" data-name="${escapeHtml(section.name)}">
       <span class="section-number">${index + 1}</span>
@@ -270,11 +324,13 @@ async function init() {
     });
   });
 
-  render();
+  showHome();
 }
 
 els.exam.addEventListener("click", startExam);
-els.reset.addEventListener("click", resetSession);
+els.study.addEventListener("click", showStudyMode);
+els.homeButton.addEventListener("click", showHome);
+els.languageCard.addEventListener("click", showLanguage);
 els.prev.addEventListener("click", () => move(-1));
 els.next.addEventListener("click", next);
 

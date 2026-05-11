@@ -3,24 +3,60 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Тест по грузинскому языку</title>
+    <title>Тесты для гражданства Грузии</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <main class="app">
+    <main class="home-screen" id="home-screen">
+      <section class="home-hero">
+        <p class="eyebrow">Тесты для гражданства Грузии</p>
+        <h1>Выберите раздел</h1>
+        <p class="home-copy">Сейчас доступен раздел по грузинскому языку. Разделы по праву и истории будут добавлены позже.</p>
+      </section>
+
+      <section class="subject-grid" aria-label="Разделы большого теста">
+        <button class="subject-card available" id="language-card" type="button">
+          <span class="subject-mark">ა</span>
+          <span>
+            <strong>Грузинский язык</strong>
+            <small id="language-count">Загрузка вопросов</small>
+          </span>
+        </button>
+
+        <button class="subject-card" type="button" disabled>
+          <span class="subject-mark">§</span>
+          <span>
+            <strong>Грузинское право</strong>
+            <small>Скоро будет доступно</small>
+          </span>
+        </button>
+
+        <button class="subject-card" type="button" disabled>
+          <span class="subject-mark">Ⴕ</span>
+          <span>
+            <strong>Грузинская история</strong>
+            <small>Скоро будет доступно</small>
+          </span>
+        </button>
+      </section>
+    </main>
+
+    <main class="app is-hidden" id="language-app">
       <aside class="sidebar" aria-label="Разделы">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">ა</div>
           <div>
-            <h1>Грузинский тест</h1>
+            <h1>Грузинский язык</h1>
             <p id="question-count">Загрузка вопросов</p>
           </div>
         </div>
 
         <div class="actions">
           <button class="primary" id="exam-button" type="button">Экзамен</button>
-          <button class="secondary" id="reset-button" type="button">Сначала</button>
+          <button class="secondary" id="study-button" type="button">Режим обучения</button>
         </div>
+
+        <button class="secondary wide" id="home-button" type="button">Все разделы</button>
 
         <nav class="sections" id="sections"></nav>
       </aside>
@@ -28,8 +64,8 @@
       <section class="workspace" aria-live="polite">
         <div class="topline">
           <div>
-            <p class="eyebrow" id="mode-label">Учебный режим</p>
-            <h2 id="screen-title">Выберите экзамен или раздел</h2>
+            <p class="eyebrow" id="mode-label">Грузинский язык</p>
+            <h2 id="screen-title">Выберите режим</h2>
           </div>
           <div class="score" id="score">0 / 0</div>
         </div>
@@ -43,7 +79,7 @@
             <div class="georgian-strip" aria-hidden="true">
               <span>ა</span><span>ბ</span><span>გ</span><span>დ</span>
             </div>
-            <p>Здесь появится вопрос. В экзамене будет 10 случайных заданий, в учебе - все вопросы выбранного раздела.</p>
+            <p>Выберите экзамен или режим обучения. В экзамене будет 10 случайных заданий, в обучении можно пройти вопросы по отдельным темам.</p>
           </div>
         </article>
 
