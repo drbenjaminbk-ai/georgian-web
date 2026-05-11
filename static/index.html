@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Тест по грузинскому языку</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <aside class="sidebar" aria-label="Разделы">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">ა</div>
+          <div>
+            <h1>Грузинский тест</h1>
+            <p id="question-count">Загрузка вопросов</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="exam-button" type="button">Экзамен</button>
+          <button class="secondary" id="reset-button" type="button">Сначала</button>
+        </div>
+
+        <nav class="sections" id="sections"></nav>
+      </aside>
+
+      <section class="workspace" aria-live="polite">
+        <div class="topline">
+          <div>
+            <p class="eyebrow" id="mode-label">Учебный режим</p>
+            <h2 id="screen-title">Выберите экзамен или раздел</h2>
+          </div>
+          <div class="score" id="score">0 / 0</div>
+        </div>
+
+        <div class="progress" aria-hidden="true">
+          <div id="progress-bar"></div>
+        </div>
+
+        <article class="question-panel" id="question-panel">
+          <div class="empty-state">
+            <div class="georgian-strip" aria-hidden="true">
+              <span>ა</span><span>ბ</span><span>გ</span><span>დ</span>
+            </div>
+            <p>Здесь появится вопрос. В экзамене будет 10 случайных заданий, в учебе - все вопросы выбранного раздела.</p>
+          </div>
+        </article>
+
+        <footer class="footer">
+          <button class="secondary" id="prev-button" type="button">Назад</button>
+          <button class="primary" id="next-button" type="button">Дальше</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
