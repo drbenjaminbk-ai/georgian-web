@@ -17,6 +17,7 @@ DATA_DIR = ROOT / "data"
 STATIC_DIR = ROOT / "static"
 PDF_PATH = DATA_DIR / "questions.pdf"
 HINTS_PATH = DATA_DIR / "hints.json"
+TRANSLATIONS_PATH = DATA_DIR / "translations.json"
 
 SECTION_NAMES = {
     "I.1": "Грамматика - падежи",
@@ -135,6 +136,14 @@ def load_hints(path: Path) -> dict[str, dict]:
     return {item["id"]: item for item in data}
 
 
+def load_translations(path: Path) -> dict[str, dict]:
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as file:
+        data = json.load(file)
+    return {item["id"]: item for item in data}
+
+
 def group_by_section(questions: list[dict]) -> dict[str, list[dict]]:
     sections: dict[str, list[dict]] = {section: [] for section in SECTION_ORDER}
     for question in questions:
@@ -146,14 +155,23 @@ def group_by_section(questions: list[dict]) -> dict[str, list[dict]]:
 QUESTIONS = parse_questions(PDF_PATH)
 SECTIONS = group_by_section(QUESTIONS)
 HINTS = load_hints(HINTS_PATH)
+TRANSLATIONS = load_translations(TRANSLATIONS_PATH)
 
 
 def public_question(question: dict) -> dict:
     hint_data = HINTS.get(question["id"], {})
+    translation_data = TRANSLATIONS.get(question["id"], {})
+    opts = translation_data.get("opts_geo", question["opts"])
     return {
         **question,
+        "opts": opts,
         "hint": hint_data.get("hint", ""),
         "rule": hint_data.get("rule", ""),
+        "translation": {
+            key: value
+            for key, value in translation_data.items()
+            if key != "opts_geo"
+        },
     }
 
 

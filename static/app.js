@@ -1,6 +1,7 @@
 const state = {
   view: "home",
   mode: null,
+  studyView: "normal",
   title: "Выберите режим",
   questions: [],
   current: 0,
@@ -23,6 +24,7 @@ const els = {
   homeButton: document.querySelector("#home-button"),
   title: document.querySelector("#screen-title"),
   mode: document.querySelector("#mode-label"),
+  studyTools: document.querySelector("#study-tools"),
   score: document.querySelector("#score"),
   panel: document.querySelector("#question-panel"),
   progress: document.querySelector("#progress-bar"),
@@ -77,6 +79,7 @@ function showLanguage() {
 
 function resetLanguageState() {
   state.mode = null;
+  state.studyView = "normal";
   state.title = "Выберите режим";
   state.questions = [];
   state.current = 0;
@@ -89,6 +92,7 @@ function resetLanguageState() {
   els.sections.classList.remove("visible");
   els.exam.classList.remove("active");
   els.study.classList.remove("active");
+  updateStudyTools();
 }
 
 function setActiveMode(mode) {
@@ -119,10 +123,25 @@ async function startExam() {
 function showStudyMode() {
   resetLanguageState();
   state.mode = "study-select";
+  state.studyView = "normal";
   state.title = "Режим обучения";
   setActiveMode("study");
   els.sections.classList.add("visible");
   render();
+}
+
+function setStudyView(view) {
+  state.studyView = view;
+  updateStudyTools();
+  render();
+}
+
+function updateStudyTools() {
+  const visible = state.mode === "study" || state.mode === "study-select";
+  els.studyTools.classList.toggle("is-hidden", !visible);
+  els.studyTools.querySelectorAll(".tool-button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.studyView === state.studyView);
+  });
 }
 
 async function startSection(section, name, button) {
@@ -195,6 +214,7 @@ function render() {
 
   const total = state.questions.length;
   const answeredCount = state.answered.size;
+  updateStudyTools();
   els.title.textContent = state.title;
   els.mode.textContent = modeLabel();
   els.score.textContent = `${state.score} / ${total}`;
@@ -234,9 +254,8 @@ function modeLabel() {
 function renderQuestion() {
   const question = state.questions[state.current];
   const answered = state.answered.get(state.current);
-  const hint = state.mode === "study" && question.hint
-    ? `<div class="hint">${escapeHtml(question.hint)}</div>`
-    : "";
+  const translation = question.translation || {};
+  const hint = renderStudyAid(question, translation);
   const feedback = answered ? renderFeedback(question, answered) : "";
 
   const answers = question.opts.map((option, index) => {
@@ -247,10 +266,14 @@ function renderQuestion() {
       statusClass = " wrong";
     }
 
+    const translationText = state.mode === "study" && state.studyView === "translation" && translation.opts_ru?.[index]
+      ? `<small class="answer-translation">${escapeHtml(translation.opts_ru[index])}</small>`
+      : "";
+
     return `
       <button class="answer${statusClass}" type="button" data-choice="${index}" ${answered ? "disabled" : ""}>
         <span class="answer-letter">${letters[index]}</span>
-        <span>${escapeHtml(option)}</span>
+        <span>${escapeHtml(option)}${translationText}</span>
       </button>
     `;
   }).join("");
@@ -270,6 +293,51 @@ function renderQuestion() {
   els.panel.querySelectorAll(".answer").forEach((button) => {
     button.addEventListener("click", () => answerQuestion(Number(button.dataset.choice)));
   });
+}
+
+function renderStudyAid(question, translation) {
+  if (state.mode !== "study") {
+    return "";
+  }
+
+  if (state.studyView === "translation") {
+    if (!translation.question_ru) {
+      return `<div class="hint">Для этого вопроса полный перевод пока не добавлен.</div>`;
+    }
+    const bridge = translation.answer_bridge
+      ? `<p><b>Связка:</b> ${escapeHtml(translation.answer_bridge)}</p>`
+      : "";
+    return `
+      <div class="translation-box">
+        <p><b>Перевод:</b> ${escapeHtml(translation.question_ru)}</p>
+        ${translation.key ? `<p><b>Ключ:</b> ${escapeHtml(stripLeadLabel(translation.key, "Ключ"))}</p>` : ""}
+        ${bridge}
+      </div>
+    `;
+  }
+
+  if (state.studyView === "keys") {
+    const key = translation.key || question.hint;
+    const bridge = translation.answer_bridge || question.rule;
+    if (!key && !bridge) {
+      return `<div class="hint">Для этого вопроса ключ пока не добавлен.</div>`;
+    }
+    return `
+      <div class="key-box">
+        ${key ? `<p><b>Ключ:</b> ${escapeHtml(stripLeadLabel(key, "Ключ"))}</p>` : ""}
+        ${bridge ? `<p><b>Как выбрать ответ:</b> ${escapeHtml(bridge)}</p>` : ""}
+      </div>
+    `;
+  }
+
+  if (question.hint) {
+    return `<div class="hint">${escapeHtml(question.hint)}</div>`;
+  }
+  return "";
+}
+
+function stripLeadLabel(text, label) {
+  return String(text).replace(new RegExp(`^${label}:\\s*`, "i"), "");
 }
 
 function renderFeedback(question, answered) {
@@ -336,6 +404,9 @@ els.exam.addEventListener("click", startExam);
 els.study.addEventListener("click", showStudyMode);
 els.homeButton.addEventListener("click", showHome);
 els.languageCard.addEventListener("click", showLanguage);
+els.studyTools.querySelectorAll(".tool-button").forEach((button) => {
+  button.addEventListener("click", () => setStudyView(button.dataset.studyView));
+});
 els.prev.addEventListener("click", () => move(-1));
 els.next.addEventListener("click", next);
 
