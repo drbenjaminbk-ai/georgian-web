@@ -11,7 +11,7 @@
       <section class="home-hero">
         <p class="eyebrow">Тесты для гражданства Грузии</p>
         <h1>Выберите раздел</h1>
-        <p class="home-copy">Сейчас доступен раздел по грузинскому языку. Разделы по праву и истории будут добавлены позже.</p>
+        <p class="home-copy">Тренируйтесь по официальным банкам вопросов: язык по темам, история по эпохам и прогнозной модели экзамена.</p>
       </section>
 
       <section class="subject-grid" aria-label="Разделы большого теста">
@@ -23,19 +23,19 @@
           </span>
         </button>
 
-        <button class="subject-card" type="button" disabled>
+        <button class="subject-card available" id="law-card" type="button">
           <span class="subject-mark">§</span>
           <span>
             <strong>Грузинское право</strong>
-            <small>Скоро будет доступно</small>
+            <small id="law-count">Загрузка вопросов</small>
           </span>
         </button>
 
-        <button class="subject-card" type="button" disabled>
+        <button class="subject-card available" id="history-card" type="button">
           <span class="subject-mark">Ⴕ</span>
           <span>
             <strong>Грузинская история</strong>
-            <small>Скоро будет доступно</small>
+            <small id="history-count">Загрузка вопросов</small>
           </span>
         </button>
       </section>
@@ -46,7 +46,7 @@
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">ა</div>
           <div>
-            <h1>Грузинский язык</h1>
+            <h1 id="subject-title">Грузинский язык</h1>
             <p id="question-count">Загрузка вопросов</p>
           </div>
         </div>
@@ -96,6 +96,6 @@
       </section>
     </main>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=tilda-app-1"></script>
   </body>
 </html>

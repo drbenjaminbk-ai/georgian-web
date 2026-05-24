@@ -28,6 +28,11 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+body.embedded {
+  min-height: auto;
+  background: transparent;
+}
+
 button {
   border: 0;
   border-radius: 8px;
@@ -49,6 +54,11 @@ button:disabled {
   padding: 24px;
 }
 
+body.embedded .app {
+  min-height: auto;
+  padding: 0;
+}
+
 .is-hidden {
   display: none !important;
 }
@@ -61,6 +71,12 @@ button:disabled {
   min-height: 100vh;
   margin: 0 auto;
   padding: 44px 0;
+}
+
+body.embedded .home-screen {
+  min-height: auto;
+  width: 100%;
+  padding: 0;
 }
 
 .home-hero {

@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent
 STATIC_DIR = ROOT / "static"
 DOCS_DIR = ROOT / "docs"
 DATA_DIR = DOCS_DIR / "data"
+STATIC_DATA_DIR = STATIC_DIR / "data"
 
 
 def main() -> None:
@@ -27,9 +28,15 @@ def main() -> None:
     payload = app.bootstrap()
     for section in payload["sections"]:
         section["questions"] = app.section_questions(section["id"])
+    for section in payload["historySections"]:
+        section["questions"] = app.history_section_questions(section["id"])
+    for section in payload["lawSections"]:
+        section["questions"] = app.law_section_questions(section["id"])
 
-    with open(DATA_DIR / "site.json", "w", encoding="utf-8") as file:
-        json.dump(payload, file, ensure_ascii=False, separators=(",", ":"))
+    for data_dir in (DATA_DIR, STATIC_DATA_DIR):
+        data_dir.mkdir(parents=True, exist_ok=True)
+        with open(data_dir / "site.json", "w", encoding="utf-8") as file:
+            json.dump(payload, file, ensure_ascii=False, separators=(",", ":"))
 
     print(f"Built {DOCS_DIR}")
 

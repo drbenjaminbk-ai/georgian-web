@@ -1,0 +1,56 @@
+<!--
+  Tilda HTML block / T123.
+  Replace APP_URL if you publish the app on another domain.
+-->
+<div class="georgian-tests-embed">
+  <iframe
+    id="georgian-tests-frame"
+    src="https://drbenjaminbk-ai.github.io/georgian-web/?embed=1"
+    title="Тесты для гражданства Грузии"
+    loading="lazy"
+    allow="clipboard-read; clipboard-write"
+  ></iframe>
+</div>
+
+<style>
+  .georgian-tests-embed {
+    width: 100%;
+  }
+
+  #georgian-tests-frame {
+    display: block;
+    width: 100%;
+    min-height: 920px;
+    border: 0;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    #georgian-tests-frame {
+      min-height: 1100px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var frame = document.getElementById("georgian-tests-frame");
+    var allowedOrigins = [
+      "https://drbenjaminbk-ai.github.io"
+    ];
+
+    window.addEventListener("message", function (event) {
+      if (allowedOrigins.indexOf(event.origin) === -1) {
+        return;
+      }
+      if (!event.data || event.data.type !== "georgian-tests:height") {
+        return;
+      }
+      var height = Number(event.data.height);
+      if (!Number.isFinite(height) || height < 500) {
+        return;
+      }
+      frame.style.height = Math.ceil(height + 24) + "px";
+    });
+  })();
+</script>
