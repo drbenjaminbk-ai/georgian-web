@@ -3,103 +3,37 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Тесты для гражданства Грузии</title>
-    <link rel="stylesheet" href="styles.css">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Доступ закрыт</title>
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #f6f3ee;
+        color: #1f2933;
+        font-family: Inter, Arial, sans-serif;
+      }
+      main {
+        width: min(640px, 100%);
+        border: 1px solid #dfd6c8;
+        border-radius: 12px;
+        background: #fffaf3;
+        padding: 28px;
+        box-shadow: 0 18px 50px rgba(31, 41, 51, 0.12);
+      }
+      h1 { margin: 0; font-size: clamp(32px, 5vw, 48px); line-height: 1.05; }
+      p { margin: 14px 0 0; color: #637083; font-size: 17px; line-height: 1.55; }
+    </style>
   </head>
   <body>
-    <main class="home-screen" id="home-screen">
-      <section class="home-hero">
-        <p class="eyebrow">Тесты для гражданства Грузии</p>
-        <h1>Выберите раздел</h1>
-        <p class="home-copy">Тренируйтесь по официальным банкам вопросов: язык по темам, история по эпохам и прогнозной модели экзамена.</p>
-      </section>
-
-      <section class="subject-grid" aria-label="Разделы большого теста">
-        <button class="subject-card available" id="language-card" type="button">
-          <span class="subject-mark">ა</span>
-          <span>
-            <strong>Грузинский язык</strong>
-            <small id="language-count">Загрузка вопросов</small>
-          </span>
-        </button>
-
-        <button class="subject-card available" id="law-card" type="button">
-          <span class="subject-mark">§</span>
-          <span>
-            <strong>Грузинское право</strong>
-            <small id="law-count">Загрузка вопросов</small>
-          </span>
-        </button>
-
-        <button class="subject-card available" id="history-card" type="button">
-          <span class="subject-mark">Ⴕ</span>
-          <span>
-            <strong>Грузинская история</strong>
-            <small id="history-count">Загрузка вопросов</small>
-          </span>
-        </button>
-      </section>
-
-      <footer class="home-legal">
-        <a href="robokassa.html">Условия оплаты, оказания услуг и возврата</a>
-      </footer>
+    <main>
+      <h1>Доступ закрыт</h1>
+      <p>Публичная версия приложения временно недоступна. Доступ к тестам предоставляется через закрытую страницу сервиса.</p>
     </main>
-
-    <main class="app is-hidden" id="language-app">
-      <aside class="sidebar" aria-label="Разделы">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">ა</div>
-          <div>
-            <h1 id="subject-title">Грузинский язык</h1>
-            <p id="question-count">Загрузка вопросов</p>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="secondary" id="exam-button" type="button">Экзамен</button>
-          <button class="secondary" id="study-button" type="button">Режим обучения</button>
-        </div>
-
-        <button class="secondary wide" id="home-button" type="button">Все разделы</button>
-
-        <nav class="sections" id="sections"></nav>
-      </aside>
-
-      <section class="workspace" aria-live="polite">
-        <div class="topline">
-          <div>
-            <p class="eyebrow" id="mode-label">Грузинский язык</p>
-            <h2 id="screen-title">Выберите режим</h2>
-          </div>
-          <div class="score" id="score">0 / 0</div>
-        </div>
-
-        <div class="progress" aria-hidden="true">
-          <div id="progress-bar"></div>
-        </div>
-
-        <div class="study-tools is-hidden" id="study-tools" aria-label="Настройки обучения">
-          <button class="tool-button active" type="button" data-study-view="normal">Обычный</button>
-          <button class="tool-button" type="button" data-study-view="keys">Ключи</button>
-          <button class="tool-button" type="button" data-study-view="translation">Перевод</button>
-        </div>
-
-        <article class="question-panel" id="question-panel">
-          <div class="empty-state">
-            <div class="georgian-strip" aria-hidden="true">
-              <span>ა</span><span>ბ</span><span>გ</span><span>დ</span>
-            </div>
-            <p>Выберите экзамен или режим обучения. В экзамене будет 10 случайных заданий, в обучении можно пройти вопросы по отдельным темам.</p>
-          </div>
-        </article>
-
-        <footer class="footer">
-          <button class="secondary" id="prev-button" type="button">Назад</button>
-          <button class="primary" id="next-button" type="button">Дальше</button>
-        </footer>
-      </section>
-    </main>
-
-    <script src="app.js?v=tilda-app-1"></script>
   </body>
 </html>
